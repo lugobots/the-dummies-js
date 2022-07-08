@@ -11,7 +11,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - "./:/app"
     network_mode: "host"
     environment:
       - BOT_NUMBER=1
@@ -21,7 +21,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=2
@@ -31,7 +31,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=3
@@ -41,7 +41,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=4
@@ -51,7 +51,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=5
@@ -61,7 +61,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=6
@@ -71,7 +71,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=7
@@ -81,7 +81,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=8
@@ -91,7 +91,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=9
@@ -101,7 +101,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=10
@@ -111,7 +111,7 @@ services:
       dockerfile: ../dev.Dockerfile
       context: ./src
     volumes:
-      - ${PWD}/:/app
+      - ./:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=11

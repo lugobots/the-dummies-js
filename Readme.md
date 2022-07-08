@@ -17,7 +17,8 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 1. **Checkout the code**: Use `git clone` or download the most recent tag release
 2. **Install the dependencies**: Although the bot runs inside the container, the code will be read directly from your drive.
 Thus, the dependencies will _not_ be installed during the building step. To keep the dependencies consistent, use this command:
-   `docker run --init -v $(pwd):/app --workdir="/app" --network=host -e BOT_NUMBER=1 -e BOT_TEAM=1 node:16 npm install`
+   (Linux/Mac) `docker run --init -v $(pwd):/app --workdir="/app" --network=host -e BOT_NUMBER=1 -e BOT_TEAM=1 node:16 npm install`
+   (Windows) or  `docker run --init -v %dir%:/app --workdir="/app" --network=host -e BOT_NUMBER=1 -e BOT_TEAM=1 node:16 npm install`
 3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code:
    `docker-compose up`
 4. **Now, made your changes**: change the methods in [current bot](./src/my_bot.js). You may also need to change some [settings](./src/settings.js)
