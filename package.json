@@ -1,0 +1,15 @@
+{
+  "name": "js-troopers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lugobots/lugo4node": "v0.0.1-beta.2"
+  }
+}

@@ -1,0 +1,187 @@
+version: '3.4'
+services:
+  game_server:
+    image: lugobots/server:${SERVER_VERSION:-latest}
+    command: play --dev-mode --timer-mode=wait
+    ports:
+      - "5000:5000"
+      - "8080:8080"
+  player_01:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=1
+      - BOT_TEAM=home
+  player_02:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=2
+      - BOT_TEAM=home
+  player_03:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=3
+      - BOT_TEAM=home
+  player_04:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=4
+      - BOT_TEAM=home
+  player_05:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=5
+      - BOT_TEAM=home
+  player_06:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=6
+      - BOT_TEAM=home
+  player_07:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=7
+      - BOT_TEAM=home
+  player_08:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=8
+      - BOT_TEAM=home
+  player_09:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=9
+      - BOT_TEAM=home
+  player_10:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=10
+      - BOT_TEAM=home
+  player_11:
+    build:
+      dockerfile: ../dev.Dockerfile
+      context: ./src
+    volumes:
+      - ${PWD}/:/app
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=11
+      - BOT_TEAM=home
+  player_away_01:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=1
+      - BOT_TEAM=away
+  player_away_02:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=2
+      - BOT_TEAM=away
+  player_away_03:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=3
+      - BOT_TEAM=away
+  player_away_04:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=4
+      - BOT_TEAM=away
+  player_away_05:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=5
+      - BOT_TEAM=away
+  player_away_06:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=6
+      - BOT_TEAM=away
+  player_away_07:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=7
+      - BOT_TEAM=away
+  player_away_08:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=8
+      - BOT_TEAM=away
+  player_away_09:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=9
+      - BOT_TEAM=away
+  player_away_10:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=10
+      - BOT_TEAM=away
+  player_away_11:
+    image: ${AWAY_BOT:-lugobots/the-dummies-go:v1.0.0-beta}
+    network_mode: "host"
+    environment:
+      - BOT_NUMBER=11
+      - BOT_TEAM=away
+
+
+
