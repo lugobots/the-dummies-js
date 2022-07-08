@@ -13,6 +13,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=home
@@ -23,6 +25,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=home
@@ -33,6 +37,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=home
@@ -43,6 +49,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=home
@@ -53,6 +61,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=home
@@ -63,6 +73,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=home
@@ -73,6 +85,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=home
@@ -83,6 +97,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=home
@@ -93,6 +109,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=home
@@ -103,6 +121,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=home
@@ -113,6 +133,8 @@ services:
     volumes:
       - ${PWD}/:/app
     network_mode: "host"
+    depends_on:
+      - game_server
     environment:
       - BOT_NUMBER=11
       - BOT_TEAM=home
