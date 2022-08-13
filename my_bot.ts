@@ -75,7 +75,7 @@ export class MyBot implements Bot {
             orderSet.setDebugMessage("returning to my position")
 
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (this.amINear(myRegion, ballRegion)) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
                 orderSet.setDebugMessage("trying to catch the ball")
             }
@@ -102,7 +102,7 @@ export class MyBot implements Bot {
             let moveDestination = this._getMyExpectedPosition(reader, me)
             orderSet.setDebugMessage("returning to my position")
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (this.amINear(myRegion, ballRegion)) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
                 orderSet.setDebugMessage("trying to catch the ball")
             }
@@ -124,7 +124,7 @@ export class MyBot implements Bot {
             const currentRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             let myOrder;
-            if (this.amINear(currentRegion, myGoalCenter)) {
+            if (this.isINear(currentRegion, myGoalCenter)) {
                 myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter())
             } else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter())
@@ -180,7 +180,7 @@ export class MyBot implements Bot {
         // for now, we are not going anything here.
     }
 
-    private amINear(myPosition: Region, targetPosition: Region) : boolean {
+    private isINear(myPosition: Region, targetPosition: Region) : boolean {
         const minDist = 2;
         return Math.abs(myPosition.getRow() - targetPosition.getRow()) <= minDist &&
         Math.abs(myPosition.getCol() - targetPosition.getCol()) <= minDist
