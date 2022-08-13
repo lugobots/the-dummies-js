@@ -1,10 +1,21 @@
-FROM node:16
+FROM node:18 as Builder
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
 
+# first we install eveyrything, including dev dependecies
+RUN npm install
 COPY . .
 
-EXPOSE 6004
+# now we can generate the prod files
+RUN npm run tsc
+
+FROM node:18
+# and, for many reasons, we copy only the essencial!
+COPY --from=Builder /app/package*.json /app/
+COPY --from=Builder /app/dist /app/dist
+WORKDIR /app
+RUN npm install --production
+
+
 CMD [ "npm", "run", "start" ]
