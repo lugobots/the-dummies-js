@@ -49,18 +49,6 @@ var MyBot = /** @class */ (function () {
         this.mapper = mapper;
         this.initPosition = initPosition;
     }
-    /**
-     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
-     * E.g. Players, the ball, etc.
-     */
-    MyBot.prototype.makeReader = function (snapshot) {
-        var reader = new lugo4node_1.GameSnapshotReader(snapshot, this.side);
-        var me = reader.getPlayer(this.side, this.number);
-        if (!me) {
-            throw new Error("did not find myself in the game");
-        }
-        return { reader: reader, me: me };
-    };
     MyBot.prototype.onDisputing = function (orderSet, snapshot) {
         try {
             var _a = this.makeReader(snapshot), reader = _a.reader, me = _a.me;
@@ -71,8 +59,7 @@ var MyBot = /** @class */ (function () {
             var moveDestination = this._getMyExpectedPosition(reader, me);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (Math.abs(myRegion.getRow() - ballRegion.getRow()) <= 2 &&
-                Math.abs(myRegion.getCol() - ballRegion.getCol()) <= 2) {
+            if (this.amINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
@@ -96,8 +83,7 @@ var MyBot = /** @class */ (function () {
             var moveDestination = this._getMyExpectedPosition(reader, me);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (Math.abs(myRegion.getRow() - ballRegion.getRow()) <= 2 &&
-                Math.abs(myRegion.getCol() - ballRegion.getCol()) <= 2) {
+            if (this.amINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
@@ -116,18 +102,16 @@ var MyBot = /** @class */ (function () {
             var myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().getCenter());
             var currentRegion = this.mapper.getRegionFromPoint(me.getPosition());
             var myOrder = void 0;
-            if (Math.abs(currentRegion.getRow() - myGoalCenter.getRow()) <= 1 &&
-                Math.abs(currentRegion.getCol() - myGoalCenter.getCol()) <= 1) {
+            if (this.amINear(currentRegion, myGoalCenter)) {
                 myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter());
             }
             else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter());
             }
-            var orderSet_1 = new lugo4node_1.Lugo.OrderSet();
-            orderSet_1.setTurn(snapshot.getTurn());
-            orderSet_1.setDebugMessage("attack!");
-            orderSet_1.setOrdersList([myOrder]);
-            return orderSet_1;
+            orderSet.setTurn(snapshot.getTurn());
+            orderSet.setDebugMessage("attack!");
+            orderSet.setOrdersList([myOrder]);
+            return orderSet;
         }
         catch (e) {
             console.log("did not play this turn", e);
@@ -138,11 +122,11 @@ var MyBot = /** @class */ (function () {
             var _a = this.makeReader(snapshot), reader = _a.reader, me = _a.me;
             var ballHolderPosition = snapshot.getBall().getPosition();
             var myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), ballHolderPosition);
-            var orderSet_2 = new lugo4node_1.Lugo.OrderSet();
-            orderSet_2.setTurn(snapshot.getTurn());
-            orderSet_2.setDebugMessage("supporting");
-            orderSet_2.setOrdersList([myOrder]);
-            return orderSet_2;
+            var orderSet_1 = new lugo4node_1.Lugo.OrderSet();
+            orderSet_1.setTurn(snapshot.getTurn());
+            orderSet_1.setDebugMessage("supporting");
+            orderSet_1.setOrdersList([myOrder]);
+            return orderSet_1;
         }
         catch (e) {
             console.log("did not play this turn", e);
@@ -156,11 +140,11 @@ var MyBot = /** @class */ (function () {
                 position = reader.getMyGoal().getCenter();
             }
             var myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), position);
-            var orderSet_3 = new lugo4node_1.Lugo.OrderSet();
-            orderSet_3.setTurn(snapshot.getTurn());
-            orderSet_3.setDebugMessage("supporting");
-            orderSet_3.setOrdersList([myOrder, reader.makeOrderCatch()]);
-            return orderSet_3;
+            var orderSet_2 = new lugo4node_1.Lugo.OrderSet();
+            orderSet_2.setTurn(snapshot.getTurn());
+            orderSet_2.setDebugMessage("supporting");
+            orderSet_2.setOrdersList([myOrder, reader.makeOrderCatch()]);
+            return orderSet_2;
         }
         catch (e) {
             console.log("did not play this turn", e);
@@ -170,6 +154,24 @@ var MyBot = /** @class */ (function () {
         // This method is called when the score is changed or before the game starts.
         // We can change the team strategy or do anything else based on the outcome of the game so far.
         // for now, we are not going anything here.
+    };
+    MyBot.prototype.amINear = function (myPosition, targetPosition) {
+        var minDist = 2;
+        throw new Error('bruno');
+        return Math.abs(myPosition.getRow() - targetPosition.getRow()) <= minDist &&
+            Math.abs(myPosition.getCol() - targetPosition.getCol()) <= minDist;
+    };
+    /**
+     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
+     * E.g. Players, the ball, etc.
+     */
+    MyBot.prototype.makeReader = function (snapshot) {
+        var reader = new lugo4node_1.GameSnapshotReader(snapshot, this.side);
+        var me = reader.getPlayer(this.side, this.number);
+        if (!me) {
+            throw new Error("did not find myself in the game");
+        }
+        return { reader: reader, me: me };
     };
     MyBot.prototype._getMyExpectedPosition = function (reader, me) {
         var ballX = reader.getBall().getPosition().getX();

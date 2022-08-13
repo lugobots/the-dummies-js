@@ -16,11 +16,11 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 1. **Checkout the code**: Use `git clone` or download the most recent tag release
 2. **Install the dependencies**: Although the bot runs inside the container, the code will be read directly from your drive.
 To keep the dependencies consistent, use this command:
-   (Linux/Mac) `docker run --init -v $(pwd):/app --workdir="/app" --network=host -e BOT_NUMBER=1 -e BOT_TEAM=1 node:18 npm install`
-   (Windows) or  `docker run --init -v %dir%:/app --workdir="/app" --network=host -e BOT_NUMBER=1 -e BOT_TEAM=1 node:18 npm install`
+   (Linux/Mac) `docker run --init -v $(pwd):/app --workdir="/app" node:18 npm install`
+   (Windows) or  `docker run --init -v %dir%:/app --workdir="/app" node:18 npm install`
 3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code:
    `npm run play`
-4. **Now, make your changes**: change the methods in [current bot](./my_bot.ts). You may also need to change some [settings in the main file](./main.ts)
+4. **Now, make your changes**: change the methods in [current bot](src/my_bot.ts). You may also need to change some [settings in the main file](src/main.ts)
 5. Play again to see your changes results: `npm run play`
 6. **Done? Build your Docker image:**
     `docker build -t my-super-bot .`
