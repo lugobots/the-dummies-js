@@ -1,14 +1,82 @@
 `use strict`;
-const {GameSnapshotReader, BotStub, PLAYER_STATE, FIELD} = require('@lugobots/lugo4node')
-const BotBase = require('./bot_base')
-const {map, PLAYER_TACTIC_POSITIONS} = require('./settings')
+import {GameSnapshotReader, PLAYER_STATE, Lugo, SPECS, Bot, Mapper} from '@lugobots/lugo4node'
 
-const TEAM_HOME = proto.lugo.Team.Side.HOME
-const TEAM_AWAY = proto.lugo.Team.Side.AWAY
+const TEAM_HOME = Lugo.Team.Side.HOME
+const TEAM_AWAY = Lugo.Team.Side.AWAY
 
-class Bot extends BotBase {
+const PLAYER_TACTIC_POSITIONS = {
+    DEFENSIVE: {
+        2: {Col: 1, Row: 1},
+        3: {Col: 2, Row: 2},
+        4: {Col: 2, Row: 3},
+        5: {Col: 1, Row: 4},
+        6: {Col: 3, Row: 1},
+        7: {Col: 3, Row: 2},
+        8: {Col: 3, Row: 3},
+        9: {Col: 3, Row: 4},
+        10: {Col: 4, Row: 3},
+        11: {Col: 4, Row: 2},
+    },
+    NORMAL: {
+        2: {Col: 2, Row: 1},
+        3: {Col: 4, Row: 2},
+        4: {Col: 4, Row: 3},
+        5: {Col: 2, Row: 4},
+        6: {Col: 6, Row: 1},
+        7: {Col: 8, Row: 2},
+        8: {Col: 8, Row: 3},
+        9: {Col: 6, Row: 4},
+        10: {Col: 7, Row: 4},
+        11: {Col: 7, Row: 1},
+    },
+    OFFENSIVE: {
+        2: {Col: 3, Row: 1},
+        3: {Col: 5, Row: 2},
+        4: {Col: 5, Row: 3},
+        5: {Col: 3, Row: 4},
+        6: {Col: 7, Row: 1},
+        7: {Col: 8, Row: 2},
+        8: {Col: 8, Row: 3},
+        9: {Col: 7, Row: 4},
+        10: {Col: 9, Row: 4},
+        11: {Col: 9, Row: 1},
+    }
 
-    onDisputing(orderSet, snapshot) {
+}
+
+
+export class MyBot implements Bot {
+
+    side: Lugo.Team.Side;
+
+    number: number;
+
+    initPosition: Lugo.Point;
+
+    mapper: Mapper;
+
+    constructor(side: Lugo.Team.Side, number: number, initPosition: Lugo.Point, mapper: Mapper) {
+        this.side = side
+        this.number = number
+        this.mapper = mapper
+        this.initPosition = initPosition
+    }
+
+
+    /**
+     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
+     * E.g. Players, the ball, etc.
+     */
+    makeReader(snapshot: Lugo.GameSnapshot) : {reader: GameSnapshotReader, me: Lugo.Player} {
+        const reader = new GameSnapshotReader(snapshot, this.side)
+        const me = reader.getPlayer(this.side, this.number)
+        if (!me) {
+            throw new Error("did not find myself in the game")
+        }
+        return {reader, me}
+    }
+
+    onDisputing(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
             const ballPosition = snapshot.getBall().getPosition()
@@ -17,7 +85,7 @@ class Bot extends BotBase {
             const myRegion = this.mapper.getRegionFromPoint(this.initPosition)
 
             // by default, I will stay at my tactic position
-            let moveDestination = this.getMyExpectedPosition(reader, me)
+            let moveDestination = this._getMyExpectedPosition(reader, me)
             orderSet.setDebugMessage("returning to my position")
 
             // if the ball is max 2 blocks away from me, I will move toward the ball
@@ -38,7 +106,7 @@ class Bot extends BotBase {
         }
     }
 
-    onDefending(orderSet, snapshot) {
+    onDefending(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
             const ballPosition = snapshot.getBall().getPosition()
@@ -46,7 +114,7 @@ class Bot extends BotBase {
             const myRegion = this.mapper.getRegionFromPoint(this.initPosition)
 
             // by default, I will stay at my tactic position
-            let moveDestination = this.getMyExpectedPosition(reader, me)
+            let moveDestination = this._getMyExpectedPosition(reader, me)
             orderSet.setDebugMessage("returning to my position")
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (Math.abs(myRegion.getRow() - ballRegion.getRow()) <= 2 &&
@@ -64,23 +132,23 @@ class Bot extends BotBase {
         }
     }
 
-    onHolding(orderSet, snapshot) {
+    onHolding(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
-            
-            const myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().center)
+
+            const myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().getCenter())
             const currentRegion = this.mapper.getRegionFromPoint(me.getPosition())
-            
+
 
             let myOrder;
             if (Math.abs(currentRegion.getRow() - myGoalCenter.getRow()) <= 1 &&
                 Math.abs(currentRegion.getCol() - myGoalCenter.getCol()) <= 1) {
-                myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().center)
+                myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter())
             } else {
-                myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().center)
+                myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter())
             }
 
-            const orderSet = new proto.lugo.OrderSet()
+            const orderSet = new Lugo.OrderSet()
             orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("attack!")
             orderSet.setOrdersList([myOrder])
@@ -90,13 +158,13 @@ class Bot extends BotBase {
         }
     }
 
-    onSupporting(orderSet, snapshot) {
+    onSupporting(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
             const ballHolderPosition = snapshot.getBall().getPosition()
             const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), ballHolderPosition)
 
-            const orderSet = new proto.lugo.OrderSet()
+            const orderSet = new Lugo.OrderSet()
             orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("supporting")
             orderSet.setOrdersList([myOrder])
@@ -106,17 +174,17 @@ class Bot extends BotBase {
         }
     }
 
-    asGoalkeeper(orderSet, snapshot, state) {
+    asGoalkeeper(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot, state: PLAYER_STATE): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
             let position = reader.getBall().getPosition()
             if (state !== PLAYER_STATE.DISPUTING_THE_BALL) {
-                position = reader.getMyGoal().center
+                position = reader.getMyGoal().getCenter()
             }
 
             const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), position)
-                
-            const orderSet = new proto.lugo.OrderSet()
+
+            const orderSet = new Lugo.OrderSet()
             orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("supporting")
             orderSet.setOrdersList([myOrder, reader.makeOrderCatch()])
@@ -126,15 +194,15 @@ class Bot extends BotBase {
         }
     }
 
-    /**
-     *
-     * @param reader
-     * @param me
-     * @returns {proto.lugo.Point}
-     */
-    getMyExpectedPosition(reader, me) {
+    gettingReady(snapshot: Lugo.GameSnapshot): void {
+        // This method is called when the score is changed or before the game starts.
+        // We can change the team strategy or do anything else based on the outcome of the game so far.
+        // for now, we are not going anything here.
+    }
+
+    private _getMyExpectedPosition(reader: GameSnapshotReader, me: Lugo.Player) : Lugo.Point {
         const ballX = reader.getBall().getPosition().getX()
-        const fieldThird = FIELD.FIELD_WIDTH/3
+        const fieldThird = SPECS.FIELD_WIDTH / 3
 
         let teamState = "OFFENSIVE"
         if (ballX < fieldThird) {
@@ -143,9 +211,7 @@ class Bot extends BotBase {
             teamState = "NORMAL"
         }
 
-        const expectedRegion = map.getRegion(PLAYER_TACTIC_POSITIONS[teamState][this.number].Col, PLAYER_TACTIC_POSITIONS[teamState][this.number].Row)
+        const expectedRegion = this.mapper.getRegion(PLAYER_TACTIC_POSITIONS[teamState][this.number].Col, PLAYER_TACTIC_POSITIONS[teamState][this.number].Row)
         return expectedRegion.getCenter();
     }
 }
-
-module.exports = Bot

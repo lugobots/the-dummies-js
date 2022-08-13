@@ -1,15 +1,20 @@
 {
   "name": "js-troopers",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node dist/main.js",
+    "play": "npm run tsc && docker-compose up",
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lugobots/lugo4node": "v0.0.1-beta.2"
+    "@lugobots/lugo4node": "v0.0.1-beta.4"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
   }
 }
