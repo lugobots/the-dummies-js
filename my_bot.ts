@@ -1,5 +1,5 @@
 `use strict`;
-import {GameSnapshotReader, PLAYER_STATE, Lugo, SPECS, Bot, Mapper} from '@lugobots/lugo4node'
+import {GameSnapshotReader, PLAYER_STATE, Lugo, SPECS, Bot, Mapper, Region} from '@lugobots/lugo4node'
 
 const TEAM_HOME = Lugo.Team.Side.HOME
 const TEAM_AWAY = Lugo.Team.Side.AWAY
@@ -62,20 +62,6 @@ export class MyBot implements Bot {
         this.initPosition = initPosition
     }
 
-
-    /**
-     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
-     * E.g. Players, the ball, etc.
-     */
-    makeReader(snapshot: Lugo.GameSnapshot) : {reader: GameSnapshotReader, me: Lugo.Player} {
-        const reader = new GameSnapshotReader(snapshot, this.side)
-        const me = reader.getPlayer(this.side, this.number)
-        if (!me) {
-            throw new Error("did not find myself in the game")
-        }
-        return {reader, me}
-    }
-
     onDisputing(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
@@ -89,8 +75,7 @@ export class MyBot implements Bot {
             orderSet.setDebugMessage("returning to my position")
 
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (Math.abs(myRegion.getRow() - ballRegion.getRow()) <= 2 &&
-                Math.abs(myRegion.getCol() - ballRegion.getCol()) <= 2) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
                 orderSet.setDebugMessage("trying to catch the ball")
             }
@@ -117,8 +102,7 @@ export class MyBot implements Bot {
             let moveDestination = this._getMyExpectedPosition(reader, me)
             orderSet.setDebugMessage("returning to my position")
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (Math.abs(myRegion.getRow() - ballRegion.getRow()) <= 2 &&
-                Math.abs(myRegion.getCol() - ballRegion.getCol()) <= 2) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
                 orderSet.setDebugMessage("trying to catch the ball")
             }
@@ -139,16 +123,12 @@ export class MyBot implements Bot {
             const myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().getCenter())
             const currentRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
-
             let myOrder;
-            if (Math.abs(currentRegion.getRow() - myGoalCenter.getRow()) <= 1 &&
-                Math.abs(currentRegion.getCol() - myGoalCenter.getCol()) <= 1) {
+            if (this.isINear(currentRegion, myGoalCenter)) {
                 myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter())
             } else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter())
             }
-
-            const orderSet = new Lugo.OrderSet()
             orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("attack!")
             orderSet.setOrdersList([myOrder])
@@ -198,6 +178,27 @@ export class MyBot implements Bot {
         // This method is called when the score is changed or before the game starts.
         // We can change the team strategy or do anything else based on the outcome of the game so far.
         // for now, we are not going anything here.
+    }
+
+    private isINear(myPosition: Region, targetPosition: Region) : boolean {
+        const minDist = 2;
+        const colDist = myPosition.getCol() - targetPosition.getCol()
+        const rowDist = myPosition.getRow() - targetPosition.getRow()
+        return Math.hypot(colDist, rowDist) <= minDist
+    }
+
+
+    /**
+     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
+     * E.g. Players, the ball, etc.
+     */
+    private makeReader(snapshot: Lugo.GameSnapshot) : {reader: GameSnapshotReader, me: Lugo.Player} {
+        const reader = new GameSnapshotReader(snapshot, this.side)
+        const me = reader.getPlayer(this.side, this.number)
+        if (!me) {
+            throw new Error("did not find myself in the game")
+        }
+        return {reader, me}
     }
 
     private _getMyExpectedPosition(reader: GameSnapshotReader, me: Lugo.Player) : Lugo.Point {
