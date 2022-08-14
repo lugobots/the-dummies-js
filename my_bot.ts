@@ -182,8 +182,9 @@ export class MyBot implements Bot {
 
     private isINear(myPosition: Region, targetPosition: Region) : boolean {
         const minDist = 2;
-        return Math.abs(myPosition.getRow() - targetPosition.getRow()) <= minDist &&
-        Math.abs(myPosition.getCol() - targetPosition.getCol()) <= minDist
+        const colDist = myPosition.getCol() - targetPosition.getCol()
+        const rowDist = myPosition.getRow() - targetPosition.getRow()
+        return Math.hypot(colDist, rowDist) <= minDist
     }
 
 
