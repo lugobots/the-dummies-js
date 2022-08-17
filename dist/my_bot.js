@@ -59,7 +59,7 @@ var MyBot = /** @class */ (function () {
             var moveDestination = this._getMyExpectedPosition(reader, me);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (this.amINear(myRegion, ballRegion)) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
@@ -83,7 +83,7 @@ var MyBot = /** @class */ (function () {
             var moveDestination = this._getMyExpectedPosition(reader, me);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
-            if (this.amINear(myRegion, ballRegion)) {
+            if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
@@ -102,7 +102,7 @@ var MyBot = /** @class */ (function () {
             var myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().getCenter());
             var currentRegion = this.mapper.getRegionFromPoint(me.getPosition());
             var myOrder = void 0;
-            if (this.amINear(currentRegion, myGoalCenter)) {
+            if (this.isINear(currentRegion, myGoalCenter)) {
                 myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter());
             }
             else {
@@ -155,11 +155,11 @@ var MyBot = /** @class */ (function () {
         // We can change the team strategy or do anything else based on the outcome of the game so far.
         // for now, we are not going anything here.
     };
-    MyBot.prototype.amINear = function (myPosition, targetPosition) {
+    MyBot.prototype.isINear = function (myPosition, targetPosition) {
         var minDist = 2;
-        throw new Error('bruno');
-        return Math.abs(myPosition.getRow() - targetPosition.getRow()) <= minDist &&
-            Math.abs(myPosition.getCol() - targetPosition.getCol()) <= minDist;
+        var colDist = myPosition.getCol() - targetPosition.getCol();
+        var rowDist = myPosition.getRow() - targetPosition.getRow();
+        return Math.hypot(colDist, rowDist) <= minDist;
     };
     /**
      * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
