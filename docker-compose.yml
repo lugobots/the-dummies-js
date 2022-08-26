@@ -9,10 +9,7 @@ services:
   player_01:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -24,150 +21,120 @@ services:
   player_02:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=home
   player_03:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=home
   player_04:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=home
   player_05:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=home
   player_06:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=home
   player_07:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=home
   player_08:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=home
   player_09:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=home
   player_10:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=home
   player_11:
     image: node:18
     working_dir: /app
-    command:
-      - npm
-      - run
-      - start
+    command: ["npm", "run", "tsc-and-start"]
     volumes:
       - "./:/app"
     network_mode: "host"
     depends_on:
-      - game_server
+      - player_01
     environment:
       - BOT_NUMBER=11
       - BOT_TEAM=home
