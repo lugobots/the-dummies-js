@@ -6,6 +6,12 @@ This bot was made using the [Node Client Player](https://github.com/lugobots/lug
 
 Use this bot as a starting point to a new one. 
 
+## Dependencies
+
+* Docker ([https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/))
+* Docker Compose ([https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/))
+* NodeJS with NPM ([https://nodejs.org/en/download/current/](https://nodejs.org/en/download/current/))
+
 ## Before starting
 
 Are you familiar with Lugo? 
@@ -13,13 +19,12 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 
 ## How to use this source code
 
-1. **Checkout the code**: Use `git clone` or download the most recent tag release
-2. **Install the dependencies**: Although the bot runs inside the container, the code will be read directly from your drive.
-To keep the dependencies consistent, use this command:
-   (Linux/Mac) `docker run --init -v $(pwd):/app --workdir="/app" node:18 npm install`
-   (Windows) or  `docker run --init -v %dir%:/app --workdir="/app" node:18 npm install`
-3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code:
-   `npm run play`
+
+1. **Checkout the code** using `git clone` or download the most recent tag release
+2. **Install the dependencies**: 
+    `npm install`
+3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
+   Run `npm run play` and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
 4. **Now, make your changes**: change the methods in [current bot](src/my_bot.ts). You may also need to change some [settings in the main file](src/main.ts)
 5. Play again to see your changes results: `npm run play`
 6. **Done? Build your Docker image:**
