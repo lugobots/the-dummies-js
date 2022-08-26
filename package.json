@@ -5,8 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "start": "node dist/main.js",
-    "play": "npm run tsc && docker-compose up",
-    "tsc-and-start": "npm run tsc && npm run start",
+    "play": "docker run --init -v ${PWD}:/app --workdir=\"/app\" node:18 npm run tsc && docker-compose up",
     "tsc": "tsc"
   },
   "keywords": [],
