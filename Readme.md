@@ -25,7 +25,7 @@ If not, before continuing, please visit [the project website](https://lugobots.d
     `git clone`
 2. **Install the dependencies**: use a Docker contianer to install the dependencies, so you guarantee compatibility with the Docker image that will run the code. 
 
-    `docker run --init -v $(pwd):/app --workdir="/app" node:18 npm install`
+    `docker run --init -v ${PWD}:/app --workdir="/app" node:18 npm install`
 3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
 
     `npm run play` and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
