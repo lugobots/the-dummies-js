@@ -20,17 +20,25 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 ## How to use this source code
 
 
-1. **Checkout the code** using `git clone` or download the most recent tag release
-2. **Install the dependencies**: 
-    `npm install`
+1. **Checkout the code** or download the most recent tag release
+   
+    `git clone`
+2. **Install the dependencies**: use a Docker contianer to install the dependencies, so you guarantee compatibility with the Docker image that will run the code. 
+
+    `docker run --init -v $(pwd):/app --workdir="/app" node:18 npm install`
 3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
-   Run `npm run play` and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
-4. **Now, make your changes**: change the methods in [current bot](src/my_bot.ts). You may also need to change some [settings in the main file](src/main.ts)
-5. Play again to see your changes results: `npm run play`
-6. **Done? Build your Docker image:**
+
+    `npm run play` and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
+4. **Now, make your changes**: change the methods in [current bot](my_bot.ts). You may also need to change some [settings in the main file](main.ts)
+5. Play again to see your changes results: 
+
+    `npm run play`
+6. **Done? Build your Docker image:**7. 
+    
     `docker build -t my-super-bot .`
 7. Before pushing your changes
-    `MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up`
+
+     `MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up`
 ## Running directly in your machine
 If you want to run the NodeJS code in your machine instead of inside the container, you definitely can do this.
 
