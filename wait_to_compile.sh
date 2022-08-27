@@ -11,7 +11,7 @@ fi
 until [[ -f "$FILE" ]]
 do
    sleep 0.5
-   [[ counter -eq $max_retry ]] && echo "Failed!" && exit 1
+   [[ counter -eq $max_retry ]] && echo "Failed: is the watcher service running? The first execution can take several minutes. Wait for the 'Starting compilation in watch mode' message" && exit 1
    ((counter++))
 done
 npm run start
