@@ -10,7 +10,7 @@ Use this bot as a starting point to a new one.
 
 * Docker ([https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/))
 * Docker Compose ([https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/))
-* NodeJS with NPM ([https://nodejs.org/en/download/current/](https://nodejs.org/en/download/current/))
+* (optional) NodeJS with NPM ([https://nodejs.org/en/download/current/](https://nodejs.org/en/download/current/))
 
 ## Before starting
 
@@ -21,24 +21,34 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 
 
 1. **Checkout the code** or download the most recent tag release
-   
-    `git clone`
-2. **Install the dependencies**: use a Docker contianer to install the dependencies, so you guarantee compatibility with the Docker image that will run the code. 
+2. **Install the dependencies and compile the Typescript**: keep the `watcher` service ALWAYS running to keep your code ready to be run.
+When this service is not running, :bangbang: **your code changes will NOT be executed** :bangbang:
 
-    `docker run --init -v ${PWD}:/app --workdir="/app" node:18 npm install`
+    ```sh 
+   docker-compose -f watcher-compose.yml up
+   ```
 3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
 
-    `npm run play` and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
+   ```sh 
+   docker-compose up
+   ```
+   and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
 4. **Now, make your changes**: change the methods in [current bot](my_bot.ts). You may also need to change some [settings in the main file](main.ts)
 5. Play again to see your changes results: 
 
-    `npm run play`
-6. **Done? Build your Docker image:**7. 
+   ```sh 
+   docker-compose up
+   ```
+6. **Are you ready to compete? Build your Docker image:** 
     
-    `docker build -t my-super-bot .`
+    ```sh 
+   docker build -t my-super-bot .
+   ```
 7. Before pushing your changes
 
-     `MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up`
+   ```sh 
+   MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up
+   ```
 ## Running directly in your machine
 If you want to run the NodeJS code in your machine instead of inside the container, you definitely can do this.
 

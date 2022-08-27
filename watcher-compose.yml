@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  watcher:
+    image: node:18
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - npm install && node_modules/.bin/tsc-watch --onCompilationStarted "rm done" --onSuccess "touch done"
+    volumes:
+      - ./:/app
