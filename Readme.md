@@ -1,9 +1,8 @@
-# Lugo - The Dummies Go
+# Lugo - The Dummies JS
  
-The Dummies Go is a Nodejs implementation of a player (bot) for [Lugo](https://lugobots.dev) game.
+The Dummies JS is a Nodejs implementation of a player (bot) for [Lugo](https://lugobots.dev) game.
 
-This bot was made using the [Node Client Player](https://github.com/lugobots/lugo4node). We recommend you to read the 
-client documentation too.
+This bot was made using the [Node Client Player](https://github.com/lugobots/lugo4node).
 
 Use this bot as a starting point to a new one. 
 
@@ -28,7 +27,7 @@ When this service is not running, :bangbang: **your code changes will NOT be exe
     ```sh 
    docker-compose -f watcher-compose.yml up
    ```
-3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
+3. **Test it out**: Before any change, make the Dummies JS play to ensure you are not working on a broken code.
 
    ```sh 
    docker-compose up
@@ -100,7 +99,8 @@ There will be 5 important methods that you must edit to change the bot behaviour
 ```
 
 
-## Running directly in your machine
+## Running directly in your machine (:ninja: advanced) 
+
 If you want to run the NodeJS code in your machine instead of inside the container, you definitely can do this.
 
 The command to start locally is `BOT_NUMBER=1 BOT_TEAM=home npm run start`. However, when you run the Docker compose 
