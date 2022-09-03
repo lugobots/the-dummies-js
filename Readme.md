@@ -1,6 +1,6 @@
-# JS Troopers
-
-JS Troopers is a Nodejs implementation of a player (bot) for [Lugo](https://lugobots.dev) game.
+# Lugo - The Dummies JS
+ 
+The Dummies JS is a Nodejs implementation of a player (bot) for [Lugo](https://lugobots.dev) game.
 
 This bot was made using the [Node Client Player](https://github.com/lugobots/lugo4node).
 
@@ -27,13 +27,13 @@ When this service is not running, :bangbang: **your code changes will NOT be exe
     ```sh 
    docker-compose -f watcher-compose.yml up
    ```
-3. **Test it out**: Before any change, make the JS Troopers play to ensure you are not working on a broken code.
+3. **Test it out**: Before any change, make the Dummies JS play to ensure you are not working on a broken code.
 
    ```sh 
    docker-compose up
    ```
    and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
-4. **Now, make your changes**: change the methods in [current bot](my_bot.ts). You may also need to change some [settings in the main file](main.ts)
+4. **Now, make your changes**: (see :question:[How to change the bot](#how-to-edit-the-bot))
 5. Play again to see your changes results: 
 
    ```sh 
@@ -44,12 +44,63 @@ When this service is not running, :bangbang: **your code changes will NOT be exe
     ```sh 
    docker build -t my-super-bot .
    ```
-7. Before pushing your changes
+7. :checkered_flag: Before pushing your changes
 
    ```sh 
    MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up
    ```
-## Running directly in your machine
+
+## How to edit the bot   
+
+The only files that you may need to edit are the ones inside [./src](./src). Ignore all the other ones.
+
+### Main file [src/main.ts](src/main.ts)
+
+You probably will not change this file. It only initializes the bot.
+
+### Settings file [src/settings.ts](./src/settings.ts)
+
+Settings file only stores configurations that will affect the player behaviour, e.g. positions, tactic, etc.
+
+### Settings file [src/my_bot.ts](./src/my_bot.ts)
+
+:eyes: This is the most important file!
+
+There will be 5 important methods that you must edit to change the bot behaviour.
+
+```typescript
+ /**
+     * OnDisputing is called when no one has the ball possession
+     */
+    onDisputing: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+
+    /**
+     * OnDefending is called when an opponent player has the ball possession
+     */
+    onDefending: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+
+    /**
+     * OnHolding is called when this bot has the ball possession
+     */
+    onHolding: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+
+
+    /**
+     * OnSupporting is called when a teammate player has the ball possession
+     */
+    onSupporting: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+
+    /**
+     * AsGoalkeeper is only called when this bot is the goalkeeper (number 1). This method is called on every turn,
+     * and the player state is passed at the last parameter.
+     */
+    asGoalkeeper: (orderSet: OrderSet, snapshot: GameSnapshot, state: PLAYER_STATE) => OrderSet | null
+
+```
+
+
+## Running directly in your machine (:ninja: advanced) 
+
 If you want to run the NodeJS code in your machine instead of inside the container, you definitely can do this.
 
 The command to start locally is `BOT_NUMBER=1 BOT_TEAM=home npm run start`. However, when you run the Docker compose 

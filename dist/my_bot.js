@@ -2,46 +2,9 @@
 exports.__esModule = true;
 exports.MyBot = void 0;
 var lugo4node_1 = require("@lugobots/lugo4node");
+var settings_1 = require("./settings");
 var TEAM_HOME = lugo4node_1.Lugo.Team.Side.HOME;
 var TEAM_AWAY = lugo4node_1.Lugo.Team.Side.AWAY;
-var PLAYER_TACTIC_POSITIONS = {
-    DEFENSIVE: {
-        2: { Col: 1, Row: 1 },
-        3: { Col: 2, Row: 2 },
-        4: { Col: 2, Row: 3 },
-        5: { Col: 1, Row: 4 },
-        6: { Col: 3, Row: 1 },
-        7: { Col: 3, Row: 2 },
-        8: { Col: 3, Row: 3 },
-        9: { Col: 3, Row: 4 },
-        10: { Col: 4, Row: 3 },
-        11: { Col: 4, Row: 2 }
-    },
-    NORMAL: {
-        2: { Col: 2, Row: 1 },
-        3: { Col: 4, Row: 2 },
-        4: { Col: 4, Row: 3 },
-        5: { Col: 2, Row: 4 },
-        6: { Col: 6, Row: 1 },
-        7: { Col: 8, Row: 2 },
-        8: { Col: 8, Row: 3 },
-        9: { Col: 6, Row: 4 },
-        10: { Col: 7, Row: 4 },
-        11: { Col: 7, Row: 1 }
-    },
-    OFFENSIVE: {
-        2: { Col: 3, Row: 1 },
-        3: { Col: 5, Row: 2 },
-        4: { Col: 5, Row: 3 },
-        5: { Col: 3, Row: 4 },
-        6: { Col: 7, Row: 1 },
-        7: { Col: 8, Row: 2 },
-        8: { Col: 8, Row: 3 },
-        9: { Col: 7, Row: 4 },
-        10: { Col: 9, Row: 4 },
-        11: { Col: 9, Row: 1 }
-    }
-};
 var MyBot = /** @class */ (function () {
     function MyBot(side, number, initPosition, mapper) {
         this.side = side;
@@ -56,7 +19,7 @@ var MyBot = /** @class */ (function () {
             var ballRegion = this.mapper.getRegionFromPoint(ballPosition);
             var myRegion = this.mapper.getRegionFromPoint(this.initPosition);
             // by default, I will stay at my tactic position
-            var moveDestination = this._getMyExpectedPosition(reader, me);
+            var moveDestination = (0, settings_1.getMyExpectedPosition)(reader, this.mapper, this.number);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
@@ -80,7 +43,7 @@ var MyBot = /** @class */ (function () {
             var ballRegion = this.mapper.getRegionFromPoint(ballPosition);
             var myRegion = this.mapper.getRegionFromPoint(this.initPosition);
             // by default, I will stay at my tactic position
-            var moveDestination = this._getMyExpectedPosition(reader, me);
+            var moveDestination = (0, settings_1.getMyExpectedPosition)(reader, this.mapper, this.number);
             orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
@@ -172,19 +135,6 @@ var MyBot = /** @class */ (function () {
             throw new Error("did not find myself in the game");
         }
         return { reader: reader, me: me };
-    };
-    MyBot.prototype._getMyExpectedPosition = function (reader, me) {
-        var ballX = reader.getBall().getPosition().getX();
-        var fieldThird = lugo4node_1.SPECS.FIELD_WIDTH / 3;
-        var teamState = "OFFENSIVE";
-        if (ballX < fieldThird) {
-            teamState = "DEFENSIVE";
-        }
-        else if (ballX < fieldThird * 2) {
-            teamState = "NORMAL";
-        }
-        var expectedRegion = this.mapper.getRegion(PLAYER_TACTIC_POSITIONS[teamState][this.number].Col, PLAYER_TACTIC_POSITIONS[teamState][this.number].Row);
-        return expectedRegion.getCenter();
     };
     return MyBot;
 }());
