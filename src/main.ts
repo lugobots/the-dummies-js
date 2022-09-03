@@ -1,4 +1,5 @@
 import {MyBot} from './my_bot'
+import {MAPPER_COLS, MAPPER_ROWS, PLAYER_INITIAL_POSITIONS} from './settings'
 import {EnvVarLoader, Mapper, NewClientFromConfig} from "@lugobots/lugo4node";
 
 // we must load the env vars following the standard defined by the game specs because all bots will receive the
@@ -6,22 +7,9 @@ import {EnvVarLoader, Mapper, NewClientFromConfig} from "@lugobots/lugo4node";
 const config = new EnvVarLoader()
 
 // the map will help us to see the field in quadrants (called regions) instead of working with coordinates
-const mapper = new Mapper(10, 6, config.getBotTeamSide())
+const mapper = new Mapper(MAPPER_COLS, MAPPER_ROWS, config.getBotTeamSide())
 
-// here we define the initial positions
-const PLAYER_INITIAL_POSITIONS = {
-    1: {Col: 0, Row: 0},
-    2: {Col: 1, Row: 1},
-    3: {Col: 2, Row: 2},
-    4: {Col: 2, Row: 3},
-    5: {Col: 1, Row: 4},
-    6: {Col: 3, Row: 1},
-    7: {Col: 3, Row: 2},
-    8: {Col: 3, Row: 3},
-    9: {Col: 3, Row: 4},
-    10: {Col: 4, Row: 3},
-    11: {Col: 4, Row: 2},
-}
+
 // our bot strategy defines our bot initial position based on its number
 const initialRegion = mapper.getRegion(PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Col, PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Row)
 
