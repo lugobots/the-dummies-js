@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 services:
   game_server:
     image: lugobots/server:${SERVER_VERSION:-latest}
@@ -6,10 +6,30 @@ services:
     ports:
       - "5000:5000"
       - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "grpc-health-probe", "-addr=game_server:5000" ]
+      interval: 2s
+      timeout: 5s
+      retries: 100
+      start_period: 10s
+  builder:
+    image: node:18
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - npm install && npm run tsc
+    volumes:
+      - ./:/app
   player_01:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -19,7 +39,12 @@ services:
   player_02:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -29,7 +54,12 @@ services:
   player_03:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -39,7 +69,12 @@ services:
   player_04:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -49,7 +84,12 @@ services:
   player_05:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -59,7 +99,12 @@ services:
   player_06:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -69,7 +114,12 @@ services:
   player_07:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -79,7 +129,12 @@ services:
   player_08:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -89,7 +144,12 @@ services:
   player_09:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -99,7 +159,12 @@ services:
   player_10:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -109,7 +174,12 @@ services:
   player_11:
     image: node:18
     working_dir: /app
-    command: /app/wait_to_compile.sh
+    command: npm run start
+    depends_on:
+      game_server:
+        condition: service_healthy
+      builder:
+        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -122,66 +192,99 @@ services:
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_02:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_03:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_04:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_05:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_06:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_07:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_08:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_09:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_10:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
   player_away_11:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=11
       - BOT_TEAM=away
+    depends_on:
+      game_server:
+        condition: service_healthy
 
 
 
