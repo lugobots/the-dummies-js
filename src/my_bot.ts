@@ -25,15 +25,15 @@ export class MyBot implements Bot {
     onDisputing(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
-            const ballPosition = snapshot.getBall().getPosition()
+            const ballPosition = snapshot.getBall().getPosition()           
 
             const ballRegion = this.mapper.getRegionFromPoint(ballPosition)
-            const myRegion = this.mapper.getRegionFromPoint(this.initPosition)
+            const myRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             // by default, I will stay at my tactic position
             let moveDestination = getMyExpectedPosition(reader, this.mapper, this.number)
             orderSet.setDebugMessage("returning to my position")
-
+            
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
@@ -56,7 +56,7 @@ export class MyBot implements Bot {
             const {reader, me} = this.makeReader(snapshot)
             const ballPosition = snapshot.getBall().getPosition()
             const ballRegion = this.mapper.getRegionFromPoint(ballPosition)
-            const myRegion = this.mapper.getRegionFromPoint(this.initPosition)
+            const myRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             // by default, I will stay at my tactic position
             let moveDestination = getMyExpectedPosition(reader, this.mapper, this.number)

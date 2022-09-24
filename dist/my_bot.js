@@ -17,7 +17,7 @@ var MyBot = /** @class */ (function () {
             var _a = this.makeReader(snapshot), reader = _a.reader, me = _a.me;
             var ballPosition = snapshot.getBall().getPosition();
             var ballRegion = this.mapper.getRegionFromPoint(ballPosition);
-            var myRegion = this.mapper.getRegionFromPoint(this.initPosition);
+            var myRegion = this.mapper.getRegionFromPoint(me.getPosition());
             // by default, I will stay at my tactic position
             var moveDestination = (0, settings_1.getMyExpectedPosition)(reader, this.mapper, this.number);
             orderSet.setDebugMessage("returning to my position");
@@ -41,7 +41,7 @@ var MyBot = /** @class */ (function () {
             var _a = this.makeReader(snapshot), reader = _a.reader, me = _a.me;
             var ballPosition = snapshot.getBall().getPosition();
             var ballRegion = this.mapper.getRegionFromPoint(ballPosition);
-            var myRegion = this.mapper.getRegionFromPoint(this.initPosition);
+            var myRegion = this.mapper.getRegionFromPoint(me.getPosition());
             // by default, I will stay at my tactic position
             var moveDestination = (0, settings_1.getMyExpectedPosition)(reader, this.mapper, this.number);
             orderSet.setDebugMessage("returning to my position");
