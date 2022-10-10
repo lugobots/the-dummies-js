@@ -25,19 +25,19 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 When this service is not running, :bangbang: **your code changes will NOT be executed** :bangbang:
 
     ```sh 
-   docker-compose -f watcher-compose.yml up
+   docker compose -f watcher-compose.yml -p builder up
    ```
 3. **Test it out**: Before any change, make the Dummies JS play to ensure you are not working on a broken code.
 
    ```sh 
-   docker-compose up
+   docker compose up
    ```
    and open [http://localhost:8080/](http://localhost:8080/) to watch the game.
 4. **Now, make your changes**: (see :question:[How to change the bot](#how-to-edit-the-bot))
 5. Play again to see your changes results: 
 
    ```sh 
-   docker-compose up
+   docker compose up
    ```
 6. **Are you ready to compete? Build your Docker image:** 
     
@@ -47,7 +47,7 @@ When this service is not running, :bangbang: **your code changes will NOT be exe
 7. :checkered_flag: Before pushing your changes
 
    ```sh 
-   MY_BOT=my-super-bot docker-compose --file docker-compose-test.yml up
+   MY_BOT=my-super-bot docker compose --file docker compose-test.yml -p tester up
    ```
 
 ## How to edit the bot   
@@ -121,4 +121,4 @@ The game server will wait all 11 players from both teams to connect before start
 
 You can start _only_ the game server with the command `game_server`. The game will wait for the players. Then, you
 start your local bot (`BOT_NUMBER=1 BOT_TEAM=home npm run start`), and finally start the rest of the players with the
-command `docker-compose up`
+command `docker compose up`
