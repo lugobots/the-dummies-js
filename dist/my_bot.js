@@ -71,7 +71,6 @@ var MyBot = /** @class */ (function () {
             else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter());
             }
-            orderSet.setTurn(snapshot.getTurn());
             orderSet.setDebugMessage("attack!");
             orderSet.setOrdersList([myOrder]);
             return orderSet;
@@ -85,11 +84,9 @@ var MyBot = /** @class */ (function () {
             var _a = this.makeReader(snapshot), reader = _a.reader, me = _a.me;
             var ballHolderPosition = snapshot.getBall().getPosition();
             var myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), ballHolderPosition);
-            var orderSet_1 = new lugo4node_1.Lugo.OrderSet();
-            orderSet_1.setTurn(snapshot.getTurn());
-            orderSet_1.setDebugMessage("supporting");
-            orderSet_1.setOrdersList([myOrder]);
-            return orderSet_1;
+            orderSet.setDebugMessage("supporting");
+            orderSet.setOrdersList([myOrder]);
+            return orderSet;
         }
         catch (e) {
             console.log("did not play this turn", e);
@@ -103,11 +100,9 @@ var MyBot = /** @class */ (function () {
                 position = reader.getMyGoal().getCenter();
             }
             var myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), position);
-            var orderSet_2 = new lugo4node_1.Lugo.OrderSet();
-            orderSet_2.setTurn(snapshot.getTurn());
-            orderSet_2.setDebugMessage("supporting");
-            orderSet_2.setOrdersList([myOrder, reader.makeOrderCatch()]);
-            return orderSet_2;
+            orderSet.setDebugMessage("supporting");
+            orderSet.setOrdersList([myOrder, reader.makeOrderCatch()]);
+            return orderSet;
         }
         catch (e) {
             console.log("did not play this turn", e);
