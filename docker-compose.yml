@@ -12,15 +12,6 @@ services:
       timeout: 5s
       retries: 100
       start_period: 10s
-  builder:
-    image: node:18
-    working_dir: /app
-    command:
-      - /bin/sh
-      - -c
-      - npm install && npm run tsc
-    volumes:
-      - ./:/app
   player_01:
     image: node:18
     working_dir: /app
@@ -28,8 +19,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -43,8 +32,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -58,8 +45,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -73,8 +58,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -88,8 +71,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -103,8 +84,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -118,8 +97,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -133,8 +110,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -148,8 +123,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -163,8 +136,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
@@ -178,8 +149,6 @@ services:
     depends_on:
       game_server:
         condition: service_healthy
-      builder:
-        condition: service_completed_successfully
     volumes:
       - "./:/app"
     network_mode: "host"
