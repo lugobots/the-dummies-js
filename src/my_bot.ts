@@ -89,7 +89,6 @@ export class MyBot implements Bot {
             } else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter())
             }
-            orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("attack!")
             orderSet.setOrdersList([myOrder])
             return orderSet
@@ -104,8 +103,6 @@ export class MyBot implements Bot {
             const ballHolderPosition = snapshot.getBall().getPosition()
             const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), ballHolderPosition)
 
-            const orderSet = new Lugo.OrderSet()
-            orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("supporting")
             orderSet.setOrdersList([myOrder])
             return orderSet
@@ -124,8 +121,6 @@ export class MyBot implements Bot {
 
             const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), position)
 
-            const orderSet = new Lugo.OrderSet()
-            orderSet.setTurn(snapshot.getTurn())
             orderSet.setDebugMessage("supporting")
             orderSet.setOrdersList([myOrder, reader.makeOrderCatch()])
             return orderSet
