@@ -31,4 +31,3 @@ lugoClient.playAsBot(myBot).then(() => {
 }).catch(e => {
     console.error(e)
 })
-
