@@ -18,15 +18,15 @@ services:
     command:
       - /bin/sh
       - -c
-      - npm install && node_modules/.bin/tsc-watch --onCompilationStarted "rm .done" --onSuccess "touch .done"
+      - npm install && umask 000 && node_modules/.bin/tsc-watch --onCompilationStarted "rm .done" --onSuccess "touch .done"
     volumes:
       - ./:/app
     healthcheck:
       test: bash -c "[ -f /app/.done ]"
       interval: 2s
-      timeout: 5s
+      timeout: 30s
       retries: 100
-      start_period: 10s
+      start_period: 30s
   player_01:
     image: node:18
     working_dir: /app

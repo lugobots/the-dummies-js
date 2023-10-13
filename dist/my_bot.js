@@ -20,13 +20,16 @@ var MyBot = /** @class */ (function () {
             var myRegion = this.mapper.getRegionFromPoint(me.getPosition());
             // by default, I will stay at my tactic position
             var moveDestination = (0, settings_1.getMyExpectedPosition)(reader, this.mapper, this.number);
-            orderSet.setDebugMessage("rcooooln");
+            orderSet.setDebugMessage("returning to my position");
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
-            var moveOrder = reader.makeOrderMoveByDirection(lugo4node_1.DIRECTION.BACKWARD_LEFT);
+            var moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination);
+            // Try other ways to create a move Oorder
+            // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
+            // we can ALWAYS try to catch the ball it we are not holding it
             var catchOrder = reader.makeOrderCatch();
             orderSet.setOrdersList([moveOrder, catchOrder]);
             return orderSet;
@@ -49,7 +52,7 @@ var MyBot = /** @class */ (function () {
                 moveDestination = ballPosition;
                 orderSet.setDebugMessage("trying to catch the ball");
             }
-            var moveOrder = reader.makeOrderMoveByDirection(lugo4node_1.DIRECTION.BACKWARD_LEFT);
+            var moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination);
             var catchOrder = reader.makeOrderCatch();
             orderSet.setOrdersList([moveOrder, catchOrder]);
             return orderSet;
@@ -70,9 +73,8 @@ var MyBot = /** @class */ (function () {
             else {
                 myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter());
             }
-            var moveOrder = reader.makeOrderMoveByDirection(lugo4node_1.DIRECTION.BACKWARD_LEFT);
-            var catchOrder = reader.makeOrderCatch();
-            orderSet.setOrdersList([moveOrder, catchOrder]);
+            orderSet.setDebugMessage("attack!");
+            orderSet.setOrdersList([myOrder]);
             return orderSet;
         }
         catch (e) {
