@@ -6,7 +6,7 @@ if [ -z "$(ls -A .)" ]; then
      echo "fail to clone the repo :-("
      exit
    fi
-   cd the-dummies-py
+   cd the-dummies-js
    LATEST_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
    echo "Latest version: "$LATEST_VERSION
    if [ -z "$VERSION" ]
@@ -19,8 +19,8 @@ if [ -z "$(ls -A .)" ]; then
    git checkout -q tags/$INSTALL_VERSION || { echo 'could not checkout that tag, does it actually exist?' ; exit 1; }
    echo "Installing The Dummies JS Version "$INSTALL_VERSION
    cd ..
-   mv the-dummies-py/* .
-   rm -rf the-dummies-py
+   mv the-dummies-js/* .
+   rm -rf the-dummies-js
    echo "All done!"
    echo ""
    echo "On Linux or Mac, Please fix the file permissions running:"
