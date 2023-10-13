@@ -17,17 +17,30 @@ Use this bot as a starting point to a new one.
 Are you familiar with Lugo? 
 If not, before continuing, please visit [the project website](https://lugobots.dev) and read about the game.
 
+## Quick setup (if you do not want to download or clone the code)
+
+You may use the [SetupEnvJ](https://hub.docker.com/r/lugobots/setup-env-js) Docker image to set up the environment for you:
+
+1. Open the terminal on an **empty directory** that will host your bot's source code (Use Powershell on Windows)
+2. Run the following command to set up the project quick start kit
+    ```shell
+    # on Lunix or Mac
+    docker run -v $(pwd):/output lugobots/setup-env-js:latest
+    
+    # on Windows
+    docker run -v ${PWD}:/output lugobots/setup-env-js:latest 
+    ```
+3. (only Linux and Mac) Fix the file permissions running `chown $USER -R .`
+
 ## How to use this source code
 
-
-1. **Checkout the code** or download the most recent tag release
-2. **Install the dependencies and compile the Typescript**: keep the `watcher` service ALWAYS running to keep your code ready to be run.
-When this service is not running, :bangbang: **your code changes will NOT be executed** :bangbang:
-
-    ```sh 
-   docker compose -f watcher-compose.yml -p builder up
+1. (optional to speed up next steps) Download the images that you will need
+   ```shell
+   docker pull lugobots/server
+   docker pull lugobots/the-dummies-go:latest
+   docker pull node:18
    ```
-3. **Test it out**: Before any change, make the Dummies JS play to ensure you are not working on a broken code.
+2. **First run to install dependencies**: The first run may take a while because the dependencies will be installed
 
    ```sh 
    docker compose up
@@ -44,12 +57,6 @@ When this service is not running, :bangbang: **your code changes will NOT be exe
     ```sh 
    docker build -t my-super-bot .
    ```
-7. :checkered_flag: Before pushing your changes
-
-   ```sh 
-   MY_BOT=my-super-bot docker compose --file docker compose-test.yml -p tester up
-   ```
-
 ## How to edit the bot   
 
 The only files that you may need to edit are the ones inside [./src](./src). Ignore all the other ones.

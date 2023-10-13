@@ -27,6 +27,8 @@ var MyBot = /** @class */ (function () {
                 orderSet.setDebugMessage("trying to catch the ball");
             }
             var moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination);
+            // Try other ways to create a move Oorder
+            // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
             // we can ALWAYS try to catch the ball it we are not holding it
             var catchOrder = reader.makeOrderCatch();
             orderSet.setOrdersList([moveOrder, catchOrder]);

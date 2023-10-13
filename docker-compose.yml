@@ -2,7 +2,7 @@ version: '3.9'
 services:
   game_server:
     image: lugobots/server:${SERVER_VERSION:-latest}
-    command: play --dev-mode --timer-mode=wait
+    command: play --dev-mode --timer-mode=wait --quiet
     ports:
       - "5000:5000"
       - "8080:8080"
@@ -12,12 +12,29 @@ services:
       timeout: 5s
       retries: 100
       start_period: 10s
+  watcher:
+    image: node:18
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - npm install && umask 000 && node_modules/.bin/tsc-watch --onCompilationStarted "rm .done" --onSuccess "touch .done"
+    volumes:
+      - ./:/app
+    healthcheck:
+      test: bash -c "[ -f /app/.done ]"
+      interval: 2s
+      timeout: 30s
+      retries: 100
+      start_period: 30s
   player_01:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -28,9 +45,11 @@ services:
   player_02:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -41,9 +60,11 @@ services:
   player_03:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -54,9 +75,11 @@ services:
   player_04:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -67,9 +90,11 @@ services:
   player_05:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -80,9 +105,11 @@ services:
   player_06:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -93,9 +120,11 @@ services:
   player_07:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -106,9 +135,11 @@ services:
   player_08:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -119,9 +150,11 @@ services:
   player_09:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -132,9 +165,11 @@ services:
   player_10:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -145,9 +180,11 @@ services:
   player_11:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
     volumes:
       - "./:/app"
@@ -161,6 +198,7 @@ services:
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -170,6 +208,7 @@ services:
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -179,6 +218,7 @@ services:
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -188,6 +228,7 @@ services:
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -197,6 +238,7 @@ services:
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -206,6 +248,7 @@ services:
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -215,6 +258,7 @@ services:
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -224,6 +268,7 @@ services:
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -233,6 +278,7 @@ services:
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -242,6 +288,7 @@ services:
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
         condition: service_healthy
@@ -253,6 +300,8 @@ services:
       - BOT_TEAM=away
     depends_on:
       game_server:
+        condition: service_healthy
+      watcher:
         condition: service_healthy
 
 

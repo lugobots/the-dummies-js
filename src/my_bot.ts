@@ -1,5 +1,5 @@
 `use strict`;
-import {GameSnapshotReader, PLAYER_STATE, Lugo, SPECS, Bot, Mapper, Region} from '@lugobots/lugo4node'
+import {Bot, DIRECTION, GameSnapshotReader, Lugo, Mapper, PLAYER_STATE, Region} from '@lugobots/lugo4node'
 import {getMyExpectedPosition} from './settings';
 
 const TEAM_HOME = Lugo.Team.Side.HOME
@@ -25,7 +25,7 @@ export class MyBot implements Bot {
     onDisputing(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
         try {
             const {reader, me} = this.makeReader(snapshot)
-            const ballPosition = snapshot.getBall().getPosition()           
+            const ballPosition = snapshot.getBall().getPosition()
 
             const ballRegion = this.mapper.getRegionFromPoint(ballPosition)
             const myRegion = this.mapper.getRegionFromPoint(me.getPosition())
@@ -33,7 +33,7 @@ export class MyBot implements Bot {
             // by default, I will stay at my tactic position
             let moveDestination = getMyExpectedPosition(reader, this.mapper, this.number)
             orderSet.setDebugMessage("returning to my position")
-            
+
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
@@ -41,6 +41,11 @@ export class MyBot implements Bot {
             }
 
             const moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination)
+
+            // Try other ways to create a move Oorder
+            // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
+
+
             // we can ALWAYS try to catch the ball it we are not holding it
             const catchOrder = reader.makeOrderCatch()
 

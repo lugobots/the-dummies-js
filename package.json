@@ -7,7 +7,8 @@
     "start": "node dist/main.js",
     "tsc-start": "tsc && npm run start",
     "play": "docker run --init -v ${PWD}:/app --workdir=\"/app\" node:18 npm run tsc && docker-compose up",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,8 @@
     "@lugobots/lugo4node": "^1.0.1-beta.1"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
     "tsc-watch": "^5.0.3",
     "typescript": "^4.8.4"
   }
