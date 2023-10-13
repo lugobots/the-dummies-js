@@ -18,11 +18,11 @@ services:
     command:
       - /bin/sh
       - -c
-      - npm install && node_modules/.bin/tsc-watch --onCompilationStarted "rm done" --onSuccess "touch done"
+      - npm install && node_modules/.bin/tsc-watch --onCompilationStarted "rm .done" --onSuccess "touch .done"
     volumes:
       - ./:/app
     healthcheck:
-      test: bash -c "[ -f /app/done ]"
+      test: bash -c "[ -f /app/.done ]"
       interval: 2s
       timeout: 5s
       retries: 100
@@ -30,7 +30,7 @@ services:
   player_01:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -45,7 +45,7 @@ services:
   player_02:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -60,7 +60,7 @@ services:
   player_03:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -75,7 +75,7 @@ services:
   player_04:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -90,7 +90,7 @@ services:
   player_05:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -105,7 +105,7 @@ services:
   player_06:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -120,7 +120,7 @@ services:
   player_07:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -135,7 +135,7 @@ services:
   player_08:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -150,7 +150,7 @@ services:
   player_09:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -165,7 +165,7 @@ services:
   player_10:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -180,7 +180,7 @@ services:
   player_11:
     image: node:18
     working_dir: /app
-    command: npm run start
+    command: npm run dev
     depends_on:
       game_server:
         condition: service_healthy
@@ -198,10 +198,9 @@ services:
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_02:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -209,10 +208,9 @@ services:
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_03:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -220,10 +218,9 @@ services:
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_04:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -231,10 +228,9 @@ services:
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_05:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -242,10 +238,9 @@ services:
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_06:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -253,10 +248,9 @@ services:
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_07:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -264,10 +258,9 @@ services:
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_08:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -275,10 +268,9 @@ services:
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_09:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -286,10 +278,9 @@ services:
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_10:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
@@ -297,10 +288,9 @@ services:
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=away
+    restart: unless-stopped
     depends_on:
       game_server:
-        condition: service_healthy
-      watcher:
         condition: service_healthy
   player_away_11:
     image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
