@@ -2,13 +2,13 @@
   "name": "the-dummies-js",
   "version": "0.0.3",
   "description": "",
-  "main": "dist/main.js",
+  "main": ".dist/main.js",
   "scripts": {
-    "start": "node dist/main.js",
+    "start": "node .dist/main.js",
     "tsc-start": "tsc --project .lugo/tsconfig.json && npm run start",
     "play": "docker run --init -v ${PWD}:/app --workdir=\"/app\" node:18 npm run tsc && docker-compose up",
     "tsc": "tsc --project .lugo/tsconfig.json",
-    "dev": "nodemon"
+    "dev": "nodemon --config .lugo/nodemon.json"
   },
   "keywords": [],
   "author": "",
