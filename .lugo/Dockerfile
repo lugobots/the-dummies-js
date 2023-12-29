@@ -5,7 +5,7 @@ COPY package*.json ./
 
 # first we install eveyrything, including dev dependecies
 RUN npm install
-COPY . .
+COPY .. .
 
 # now we can generate the prod files
 RUN npm run tsc
