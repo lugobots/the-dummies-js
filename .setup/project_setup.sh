@@ -7,7 +7,7 @@ if [ -z "$(ls -A .)" ]; then
      exit
    fi
    cd the-dummies-js
-   LATEST_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+   LATEST_VERSION=$(git tag --sort=-creatordate | grep -v rc | head -n 1)
    echo "Latest version: "$LATEST_VERSION
    if [ -z "$VERSION" ]
    then
@@ -19,8 +19,10 @@ if [ -z "$(ls -A .)" ]; then
    git checkout -q tags/$INSTALL_VERSION || { echo 'could not checkout that tag, does it actually exist?' ; exit 1; }
    echo "Installing The Dummies JS Version "$INSTALL_VERSION
    cd ..
-   mv the-dummies-js/* .
+   mv the-dummies-js/{.*,*} .
    rm -rf the-dummies-js
+   rm -rf .git
+   chmod 666 -R .*
    echo "All done!"
    echo ""
    echo "On Linux or Mac, Please fix the file permissions running:"
