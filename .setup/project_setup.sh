@@ -22,7 +22,6 @@ if [ -z "$(ls -A .)" ]; then
    mv the-dummies-js/{.*,*} .
    rm -rf the-dummies-js
    rm -rf .git
-   chmod 666 -R .*
    echo "All done!"
    echo ""
    echo "On Linux or Mac, Please fix the file permissions running:"
