@@ -3,7 +3,7 @@
 
 // We will map the field into cols and rows, so the mapper will read the regions for us
 // Read https://github.com/lugobots/lugo4node#mapper-and-region-classes
-import {GameSnapshotReader, Lugo, SPECS, Mapper} from "@lugobots/lugo4node";
+import { Lugo, SPECS, Mapper, GameSnapshotInspector} from "@lugobots/lugo4node";
 
 export const MAPPER_COLS = 10
 export const MAPPER_ROWS = 6
@@ -64,7 +64,7 @@ export const PLAYER_TACTIC_POSITIONS = {
 
 }
 
-export function getMyExpectedPosition(reader: GameSnapshotReader, mapper: Mapper, myNumber: number): Lugo.Point {
+export function getMyExpectedPosition(reader: GameSnapshotInspector, mapper: Mapper, myNumber: number): Lugo.Point {
     const ballRegion = mapper.getRegionFromPoint(reader.getBall().getPosition())
     const fieldThird = MAPPER_COLS  / 3
     const ballCols = ballRegion.getCol()

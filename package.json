@@ -1,6 +1,6 @@
 {
   "name": "the-dummies-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": ".dist/main.js",
   "scripts": {
@@ -14,9 +14,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lugobots/lugo4node": "^2.0.1"
+    "@lugobots/lugo4node": "^2.0.5"
   },
   "devDependencies": {
+    "@types/node": "^20.11.24",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "tsc-watch": "^5.0.3",

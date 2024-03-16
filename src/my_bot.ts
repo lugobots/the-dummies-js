@@ -1,9 +1,8 @@
 `use strict`;
-import {Bot, DIRECTION, GameSnapshotReader, Lugo, Mapper, PLAYER_STATE, Region} from '@lugobots/lugo4node'
+import {Bot, GameSnapshotInspector, Lugo, Mapper, PLAYER_STATE, distanceBetweenPoints, Region} from '@lugobots/lugo4node'
 import {getMyExpectedPosition} from './settings';
 
-const TEAM_HOME = Lugo.Team.Side.HOME
-const TEAM_AWAY = Lugo.Team.Side.AWAY
+type MethodReturn = Lugo.Order[] | { orders: Lugo.Order[]; debug_message: string; } | null;
 
 export class MyBot implements Bot {
 
@@ -22,119 +21,126 @@ export class MyBot implements Bot {
         this.initPosition = initPosition
     }
 
-    onDisputing(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
+    onDisputing(inspector: GameSnapshotInspector): MethodReturn {
         try {
-            const {reader, me} = this.makeReader(snapshot)
-            const ballPosition = snapshot.getBall().getPosition()
+            const orders = []
+            const me = inspector.getMe()
+            const ballPosition = inspector.getBall().getPosition()
 
             const ballRegion = this.mapper.getRegionFromPoint(ballPosition)
             const myRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             // by default, I will stay at my tactic position
-            let moveDestination = getMyExpectedPosition(reader, this.mapper, this.number)
-            orderSet.setDebugMessage("returning to my position")
+            let moveDestination = getMyExpectedPosition(inspector, this.mapper, this.number)
+
 
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
-                orderSet.setDebugMessage("trying to catch the ball")
             }
 
-            const moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination)
+            const moveOrder = inspector.makeOrderMoveMaxSpeed(moveDestination)
 
             // Try other ways to create a move Oorder
             // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
-
-
             // we can ALWAYS try to catch the ball it we are not holding it
-            const catchOrder = reader.makeOrderCatch()
+            const catchOrder = inspector.makeOrderCatch()
 
-            orderSet.setOrdersList([moveOrder, catchOrder])
-            return orderSet
+            orders.push(moveOrder, catchOrder)
+
+            return orders
         } catch (e) {
             console.log(`did not play this turn`, e)
+            return null
         }
     }
 
-    onDefending(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
+    onDefending(inspector: GameSnapshotInspector): MethodReturn {
         try {
-            const {reader, me} = this.makeReader(snapshot)
-            const ballPosition = snapshot.getBall().getPosition()
+            const orders = []
+            const me = inspector.getMe()
+            const ballPosition = inspector.getBall().getPosition()
             const ballRegion = this.mapper.getRegionFromPoint(ballPosition)
             const myRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             // by default, I will stay at my tactic position
-            let moveDestination = getMyExpectedPosition(reader, this.mapper, this.number)
-            orderSet.setDebugMessage("returning to my position")
+            let moveDestination = getMyExpectedPosition(inspector, this.mapper, this.number)
+
             // if the ball is max 2 blocks away from me, I will move toward the ball
             if (this.isINear(myRegion, ballRegion)) {
                 moveDestination = ballPosition
-                orderSet.setDebugMessage("trying to catch the ball")
             }
-            const moveOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), moveDestination)
-            const catchOrder = reader.makeOrderCatch()
+            const moveOrder = inspector.makeOrderMoveMaxSpeed(moveDestination)
+            const catchOrder = inspector.makeOrderCatch()
 
-            orderSet.setOrdersList([moveOrder, catchOrder])
-            return orderSet
+            orders.push(moveOrder, catchOrder)
+            return orders
         } catch (e) {
             console.log(`did not play this turn`, e)
+            return null
         }
     }
 
-    onHolding(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
+    onHolding(inspector: GameSnapshotInspector): MethodReturn {
         try {
-            const {reader, me} = this.makeReader(snapshot)
+            const orders = []
+            const me = inspector.getMe()
 
-            const myGoalCenter = this.mapper.getRegionFromPoint(reader.getOpponentGoal().getCenter())
+            const attackGoalCenter = this.mapper.getAttackGoal().getCenter();
+            const opponentGoal = this.mapper.getRegionFromPoint(attackGoalCenter)
             const currentRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             let myOrder;
-            if (this.isINear(currentRegion, myGoalCenter)) {
-                myOrder = reader.makeOrderKickMaxSpeed(snapshot.getBall(), reader.getOpponentGoal().getCenter())
+
+            if (this.isINear(currentRegion, opponentGoal)) {
+                myOrder = inspector.makeOrderKickMaxSpeed(attackGoalCenter)
             } else {
-                myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), reader.getOpponentGoal().getCenter())
+                myOrder = inspector.makeOrderMoveMaxSpeed(attackGoalCenter)
             }
-            orderSet.setDebugMessage("attack!")
-            orderSet.setOrdersList([myOrder])
-            return orderSet
+
+            orders.push(myOrder)
+            return orders
         } catch (e) {
             console.log(`did not play this turn`, e)
+            return null
         }
     }
 
-    onSupporting(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot): Lugo.OrderSet {
+    onSupporting(inspector: GameSnapshotInspector): MethodReturn {
         try {
-            const {reader, me} = this.makeReader(snapshot)
-            const ballHolderPosition = snapshot.getBall().getPosition()
-            const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), ballHolderPosition)
+            const orders = []
+            const me = inspector.getMe()
+            const ballHolderPosition = inspector.getBall().getPosition()
+            const myOrder = inspector.makeOrderMoveMaxSpeed(ballHolderPosition)
 
-            orderSet.setDebugMessage("supporting")
-            orderSet.setOrdersList([myOrder])
-            return orderSet
+            orders.push(myOrder)
+            return orders
         } catch (e) {
             console.log(`did not play this turn`, e)
+            return null
         }
     }
 
-    asGoalkeeper(orderSet: Lugo.OrderSet, snapshot: Lugo.GameSnapshot, state: PLAYER_STATE): Lugo.OrderSet {
+    asGoalkeeper(inspector: GameSnapshotInspector, state: PLAYER_STATE): MethodReturn {
         try {
-            const {reader, me} = this.makeReader(snapshot)
-            let position = reader.getBall().getPosition()
+            const orders = []
+            const me = inspector.getMe()
+            let position = inspector.getBall().getPosition()
             if (state !== PLAYER_STATE.DISPUTING_THE_BALL) {
-                position = reader.getMyGoal().getCenter()
+                position = this.mapper.getDefenseGoal().getCenter()
             }
 
-            const myOrder = reader.makeOrderMoveMaxSpeed(me.getPosition(), position)
+            const myOrder = inspector.makeOrderMoveMaxSpeed(position)
 
-            orderSet.setDebugMessage("supporting")
-            orderSet.setOrdersList([myOrder, reader.makeOrderCatch()])
-            return orderSet
+            orders.push(myOrder, inspector.makeOrderCatch())
+            return orders
         } catch (e) {
             console.log(`did not play this turn`, e)
+            return null
         }
     }
 
-    gettingReady(snapshot: Lugo.GameSnapshot): void {
+    gettingReady(inspector: GameSnapshotInspector): void {
         // This method is called when the score is changed or before the game starts.
         // We can change the team strategy or do anything else based on the outcome of the game so far.
         // for now, we are not going anything here.
@@ -146,20 +152,4 @@ export class MyBot implements Bot {
         const rowDist = myPosition.getRow() - targetPosition.getRow()
         return Math.hypot(colDist, rowDist) <= minDist
     }
-
-
-    /**
-     * This method creates a snapshot reader. The Snapshot readers reads the game state and return elements we may need.
-     * E.g. Players, the ball, etc.
-     */
-    private makeReader(snapshot: Lugo.GameSnapshot): { reader: GameSnapshotReader, me: Lugo.Player } {
-        const reader = new GameSnapshotReader(snapshot, this.side)
-        const me = reader.getPlayer(this.side, this.number)
-        if (!me) {
-            throw new Error("did not find myself in the game")
-        }
-        return {reader, me}
-    }
-
-
 }

@@ -18,7 +18,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
+      - rm .lugo/.done || npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
     volumes:
       - ./:/app
     healthcheck:
@@ -193,7 +193,7 @@ services:
       - BOT_NUMBER=11
       - BOT_TEAM=home
   player_away_01:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=1
@@ -203,7 +203,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_02:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=2
@@ -213,7 +213,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_03:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=3
@@ -223,7 +223,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_04:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=4
@@ -233,7 +233,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_05:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=5
@@ -243,7 +243,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_06:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=6
@@ -253,7 +253,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_07:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=7
@@ -263,7 +263,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_08:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=8
@@ -273,7 +273,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_09:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=9
@@ -283,7 +283,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_10:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=10
@@ -293,7 +293,7 @@ services:
       game_server:
         condition: service_healthy
   player_away_11:
-    image: ${AWAY_BOT:-lugobots/the-dummies-go:latest}
+    image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=11
