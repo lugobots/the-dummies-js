@@ -79,29 +79,29 @@ There will be 5 important methods that you must edit to change the bot behaviour
  /**
      * OnDisputing is called when no one has the ball possession
      */
-    onDisputing: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+    onDisputing: (inspector: GameSnapshotInspector) => Lugo.Order[] | null
 
     /**
      * OnDefending is called when an opponent player has the ball possession
      */
-    onDefending: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+    onDefending: (inspector: GameSnapshotInspector) => Lugo.Order[] | null
 
     /**
      * OnHolding is called when this bot has the ball possession
      */
-    onHolding: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+    onHolding: (inspector: GameSnapshotInspector) => Lugo.Order[] | null
 
 
     /**
      * OnSupporting is called when a teammate player has the ball possession
      */
-    onSupporting: (orderSet: OrderSet, snapshot: GameSnapshot) => OrderSet | null
+    onSupporting: (inspector: GameSnapshotInspector) => Lugo.Order[] | null
 
     /**
      * AsGoalkeeper is only called when this bot is the goalkeeper (number 1). This method is called on every turn,
      * and the player state is passed at the last parameter.
      */
-    asGoalkeeper: (orderSet: OrderSet, snapshot: GameSnapshot, state: PLAYER_STATE) => OrderSet | null
+    asGoalkeeper: (inspector: GameSnapshotInspector, state: PLAYER_STATE) => Lugo.Order[] | null
 
 ```
 
