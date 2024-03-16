@@ -18,11 +18,11 @@ services:
     command:
       - /bin/sh
       - -c
-      - npm install && umask 000 && node_modules/.bin/tsc-watch --onCompilationStarted "rm .done" --onSuccess "touch .done"
+      - npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
     volumes:
       - ./:/app
     healthcheck:
-      test: bash -c "[ -f /app/.done ]"
+      test: bash -c "[ -f /app/.lugo/.done ]"
       interval: 2s
       timeout: 30s
       retries: 100
