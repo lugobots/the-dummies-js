@@ -63,14 +63,15 @@ var MyBot = /** @class */ (function () {
         try {
             var orders = [];
             var me = inspector.getMe();
-            var opponentGoal = this.mapper.getRegionFromPoint(this.mapper.getAttackGoal().getCenter());
+            var attackGoalCenter = this.mapper.getAttackGoal().getCenter();
+            var opponentGoal = this.mapper.getRegionFromPoint(attackGoalCenter);
             var currentRegion = this.mapper.getRegionFromPoint(me.getPosition());
             var myOrder = void 0;
             if (this.isINear(currentRegion, opponentGoal)) {
-                myOrder = inspector.makeOrderKickMaxSpeed(this.mapper.getAttackGoal().getCenter());
+                myOrder = inspector.makeOrderKickMaxSpeed(attackGoalCenter);
             }
             else {
-                myOrder = inspector.makeOrderMoveMaxSpeed(this.mapper.getAttackGoal().getCenter());
+                myOrder = inspector.makeOrderMoveMaxSpeed(attackGoalCenter);
             }
             orders.push(myOrder);
             return orders;

@@ -1,5 +1,5 @@
 `use strict`;
-import {Bot, GameSnapshotInspector, Lugo, Mapper, PLAYER_STATE, Region} from '@lugobots/lugo4node'
+import {Bot, GameSnapshotInspector, Lugo, Mapper, PLAYER_STATE, distanceBetweenPoints, Region} from '@lugobots/lugo4node'
 import {getMyExpectedPosition} from './settings';
 
 type MethodReturn = Lugo.Order[] | { orders: Lugo.Order[]; debug_message: string; } | null;
@@ -86,15 +86,16 @@ export class MyBot implements Bot {
             const orders = []
             const me = inspector.getMe()
 
-            const opponentGoal = this.mapper.getRegionFromPoint(this.mapper.getAttackGoal().getCenter())
+            const attackGoalCenter = this.mapper.getAttackGoal().getCenter();
+            const opponentGoal = this.mapper.getRegionFromPoint(attackGoalCenter)
             const currentRegion = this.mapper.getRegionFromPoint(me.getPosition())
 
             let myOrder;
 
             if (this.isINear(currentRegion, opponentGoal)) {
-                myOrder = inspector.makeOrderKickMaxSpeed(this.mapper.getAttackGoal().getCenter())
+                myOrder = inspector.makeOrderKickMaxSpeed(attackGoalCenter)
             } else {
-                myOrder = inspector.makeOrderMoveMaxSpeed( this.mapper.getAttackGoal().getCenter())
+                myOrder = inspector.makeOrderMoveMaxSpeed(attackGoalCenter)
             }
 
             orders.push(myOrder)
