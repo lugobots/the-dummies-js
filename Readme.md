@@ -17,21 +17,6 @@ Use this bot as a starting point to a new one.
 Are you familiar with Lugo? 
 If not, before continuing, please visit [the project website](https://lugobots.dev) and read about the game.
 
-## Quick setup (if you do not want to download or clone the code)
-
-You may use the [SetupEnvJ](https://hub.docker.com/r/lugobots/setup-env-js) Docker image to set up the environment for you:
-
-1. Open the terminal on an **empty directory** that will host your bot's source code (Use Powershell on Windows)
-2. Run the following command to set up the project quick start kit
-    ```shell
-    # on Lunix or Mac
-    docker run -v $(pwd):/output lugobots/setup-env-js:latest
-    
-    # on Windows
-    docker run -v ${PWD}:/output lugobots/setup-env-js:latest 
-    ```
-3. (only Linux and Mac) Fix the file permissions running `chown $USER -R .`
-
 ## How to use this source code
 
 1. (optional to speed up next steps) Download the images that you will need
