@@ -8,7 +8,7 @@
     "tsc-start": "tsc --project .lugo/tsconfig.json && npm run start",
     "play": "docker run --init -v ${PWD}:/app --workdir=\"/app\" node:18 npm run tsc && docker-compose up",
     "tsc": "tsc --project .lugo/tsconfig.json",
-    "dev": "nodemon --config .lugo/nodemon.json"
+    "dev": "nodemon -L --config .lugo/nodemon.json"
   },
   "keywords": [],
   "author": "",
