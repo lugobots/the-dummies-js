@@ -2,7 +2,7 @@ FROM node:18.19.0-slim as Builder
 
 WORKDIR /app
 COPY package*.json ./
-
+RUN npm install typescript -g
 # first we install eveyrything, including dev dependecies
 RUN npm install
 COPY .. .
