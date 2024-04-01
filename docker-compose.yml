@@ -2,32 +2,35 @@ version: '3.9'
 services:
   game_server:
     image: lugobots/server:${SERVER_VERSION:-latest}
-    command: play --dev-mode --timer-mode=wait --quiet
+    command: play --dev-mode --listening-duration=${LISTENING_DURATION:-50ms} --timer-mode=${TIMER_MODE:-wait}
     ports:
       - "5000:5000"
       - "8080:8080"
     healthcheck:
       test: [ "CMD", "grpc-health-probe", "-addr=game_server:5000" ]
       interval: 2s
-      timeout: 5s
-      retries: 100
+      timeout: 10s
+      retries: 3
       start_period: 10s
+    environment:
+      - HOME_TEAM_NAME=${HOME_TEAM_NAME:-HOME}
+      - AWAY_TEAM_NAME=${AWAY_TEAM_NAME:-AWAY}
   watcher:
     image: node:18
     working_dir: /app
     command:
       - /bin/sh
       - -c
-      - rm .lugo/.done || npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
+      - npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
     volumes:
-      - ./:/app
+      - ${PROJECT_PATH}:/app
     healthcheck:
       test: bash -c "[ -f /app/.lugo/.done ]"
       interval: 2s
       timeout: 30s
-      retries: 100
+      retries: 3
       start_period: 30s
-  player_01:
+  player_home_01:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -37,12 +40,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=1
-      - BOT_TEAM=home
-  player_02:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_02:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -52,12 +55,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=2
-      - BOT_TEAM=home
-  player_03:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_03:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -67,12 +70,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=3
-      - BOT_TEAM=home
-  player_04:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_04:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -82,12 +85,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=4
-      - BOT_TEAM=home
-  player_05:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_05:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -97,12 +100,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=5
-      - BOT_TEAM=home
-  player_06:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_06:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -112,12 +115,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=6
-      - BOT_TEAM=home
-  player_07:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_07:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -127,12 +130,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=7
-      - BOT_TEAM=home
-  player_08:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_08:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -142,12 +145,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=8
-      - BOT_TEAM=home
-  player_09:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_09:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -157,12 +160,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=9
-      - BOT_TEAM=home
-  player_10:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_10:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -172,12 +175,12 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=10
-      - BOT_TEAM=home
-  player_11:
+      - BOT_TEAM=${PLAYER_SIDE:-home}
+  player_home_11:
     image: node:18
     working_dir: /app
     command: npm run dev
@@ -187,17 +190,18 @@ services:
       watcher:
         condition: service_healthy
     volumes:
-      - "./:/app"
+      - ${PROJECT_PATH}:/app
     network_mode: "host"
     environment:
       - BOT_NUMBER=11
-      - BOT_TEAM=home
+      - BOT_TEAM=${PLAYER_SIDE:-home}
   player_away_01:
     image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=1
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -207,7 +211,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=2
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -217,7 +222,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=3
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -227,7 +233,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=4
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -237,7 +244,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=5
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -247,7 +255,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=6
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -257,7 +266,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=7
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -267,7 +277,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=8
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -277,7 +288,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=9
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -287,7 +299,8 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=10
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
       game_server:
@@ -297,12 +310,10 @@ services:
     network_mode: "host"
     environment:
       - BOT_NUMBER=11
-      - BOT_TEAM=away
+      - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - MODE=${MODE:-default} # default zombies statues kids defenses
     depends_on:
       game_server:
         condition: service_healthy
       watcher:
         condition: service_healthy
-
-
-
