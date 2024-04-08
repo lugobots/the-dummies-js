@@ -19,15 +19,27 @@ services:
     environment:
       - HOME_TEAM_NAME=${HOME_TEAM_NAME:-HOME}
       - AWAY_TEAM_NAME=${AWAY_TEAM_NAME:-AWAY}
+  builder:
+    image: node:18
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - npm install && umask 000
+    volumes:
+      - ${PROJECT_PATH:-./}:/app
   watcher:
     image: node:18
     working_dir: /app
     command:
       - /bin/sh
       - -c
-      - npm install && umask 000 && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
+      - (rm -f .lugo/.done || echo "continue") && node_modules/.bin/tsc-watch --project .lugo/tsconfig.json --onCompilationStarted "rm -f .lugo/.done" --onSuccess "touch .lugo/.done"
     volumes:
       - ${PROJECT_PATH:-./}:/app
+    depends_on:
+      builder:
+        condition: service_completed_successfully
     healthcheck:
       test: bash -c "[ -f /app/.lugo/.done ]"
       interval: 2s
