@@ -24,9 +24,9 @@ var MyBot = /** @class */ (function () {
                 moveDestination = ballPosition;
             }
             var moveOrder = inspector.makeOrderMoveMaxSpeed(moveDestination);
-            // Try other ways to create a move Oorder
+            // Try other ways to create a move Order
             // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
-            // we can ALWAYS try to catch the ball it we are not holding it
+            // we can ALWAYS try to catch the ball if we are not holding it
             var catchOrder = inspector.makeOrderCatch();
             orders.push(moveOrder, catchOrder);
             return orders;
