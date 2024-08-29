@@ -1,5 +1,16 @@
 `use strict`;
-import {Bot, GameSnapshotInspector, Lugo, Mapper, PLAYER_STATE, distanceBetweenPoints, Region} from '@lugobots/lugo4node'
+import {
+    Bot,
+    GameSnapshotInspector,
+    Lugo,
+    Mapper,
+    PLAYER_STATE,
+    distanceBetweenPoints,
+    geo,
+    SPECS,
+    Region,
+    DIRECTION, ORIENTATION
+} from '@lugobots/lugo4node'
 import {getMyExpectedPosition} from './settings';
 
 type MethodReturn = Lugo.Order[] | { orders: Lugo.Order[]; debug_message: string; } | null;
@@ -41,9 +52,9 @@ export class MyBot implements Bot {
 
             const moveOrder = inspector.makeOrderMoveMaxSpeed(moveDestination)
 
-            // Try other ways to create a move Oorder
+            // Try other ways to create a move Order
             // const moveOrder = reader.makeOrderMoveByDirection(DIRECTION.BACKWARD)
-            // we can ALWAYS try to catch the ball it we are not holding it
+            // we can ALWAYS try to catch the ball if we are not holding it
             const catchOrder = inspector.makeOrderCatch()
 
             orders.push(moveOrder, catchOrder)
