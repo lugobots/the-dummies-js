@@ -5,11 +5,10 @@ var lugo4node_1 = require("@lugobots/lugo4node");
 var starter = (0, lugo4node_1.NewDefaultStarter)();
 // ADVANCED
 // the map will help us to see the field in quadrants (called regions) instead of working with coordinates
-//
-// const config = new EnvVarLoader()
+var config = new lugo4node_1.EnvVarLoader();
 // the map will help us to see the field in quadrants (called regions) instead of working with coordinates
-// const map = new Mapper(10, 6, config.getBotTeamSide())
+var map = new lugo4node_1.Mapper(10, 6, config.getBotTeamSide());
 // our bot strategy defines our bot initial position based on its number
-// import {PLAYER_INITIAL_POSITIONS} from "./settings";
-// const initialRegion = map.getRegion( PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Col, PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Row)
-starter.run(new my_bot_1.MyBot(starter.getConfig().getBotTeamSide(), starter.getConfig().getBotNumber(), starter.getInitialPosition(), starter.getMapper()));
+var settings_1 = require("./settings");
+var initialRegion = map.getRegion(settings_1.PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Col, settings_1.PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Row);
+starter.run(new my_bot_1.MyBot(starter.getConfig().getBotTeamSide(), starter.getConfig().getBotNumber(), initialRegion.getCenter(), starter.getMapper()));
