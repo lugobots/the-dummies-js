@@ -6,20 +6,19 @@ const starter = NewDefaultStarter()
 
 // ADVANCED
 // the map will help us to see the field in quadrants (called regions) instead of working with coordinates
-//
-// const config = new EnvVarLoader()
+const config = new EnvVarLoader()
 
 // the map will help us to see the field in quadrants (called regions) instead of working with coordinates
-// const map = new Mapper(10, 6, config.getBotTeamSide())
+const map = new Mapper(10, 6, config.getBotTeamSide())
 
 // our bot strategy defines our bot initial position based on its number
-// import {PLAYER_INITIAL_POSITIONS} from "./settings";
-// const initialRegion = map.getRegion( PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Col, PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Row)
+import {PLAYER_INITIAL_POSITIONS} from "./settings";
+const initialRegion = map.getRegion( PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Col, PLAYER_INITIAL_POSITIONS[config.getBotNumber()].Row)
 
 starter.run(new MyBot(
   starter.getConfig().getBotTeamSide(),
   starter.getConfig().getBotNumber(),
-  starter.getInitialPosition(),
+  initialRegion.getCenter(),
   starter.getMapper()
 ));
 

@@ -6,12 +6,12 @@ version: '3.9'
 services:
   game_server:
     image: lugobots/server:${SERVER_VERSION:-latest}
-    command: play --dev-mode --listening-duration=${LISTENING_DURATION:-50ms} --timer-mode=${TIMER_MODE:-wait}
+    command: play --dev-mode --listening-duration=${LISTENING_DURATION:-50ms} --grpc-port=${GAME_GRPC_PORT:-5000} --timer-mode=${TIMER_MODE:-wait}
     ports:
-      - "5000:5000"
+      - "${GAME_GRPC_PORT:-5000}:${GAME_GRPC_PORT:-5000}"
       - "8080:8080"
     healthcheck:
-      test: [ "CMD", "grpc-health-probe", "-addr=game_server:5000" ]
+      test: [ "CMD", "grpc-health-probe", "-addr=game_server:${GAME_GRPC_PORT:-5000}" ]
       interval: 2s
       timeout: 10s
       retries: 3
@@ -61,6 +61,7 @@ services:
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_02:
     image: node:18
     working_dir: /app
@@ -76,6 +77,7 @@ services:
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_03:
     image: node:18
     working_dir: /app
@@ -91,6 +93,7 @@ services:
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_04:
     image: node:18
     working_dir: /app
@@ -106,6 +109,7 @@ services:
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_05:
     image: node:18
     working_dir: /app
@@ -121,6 +125,7 @@ services:
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_06:
     image: node:18
     working_dir: /app
@@ -136,6 +141,7 @@ services:
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_07:
     image: node:18
     working_dir: /app
@@ -151,6 +157,7 @@ services:
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_08:
     image: node:18
     working_dir: /app
@@ -166,6 +173,7 @@ services:
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_09:
     image: node:18
     working_dir: /app
@@ -181,6 +189,7 @@ services:
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_10:
     image: node:18
     working_dir: /app
@@ -196,6 +205,7 @@ services:
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_home_11:
     image: node:18
     working_dir: /app
@@ -211,12 +221,14 @@ services:
     environment:
       - BOT_NUMBER=11
       - BOT_TEAM=${PLAYER_SIDE:-home}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
   player_away_01:
     image: ${AWAY_BOT:-lugobots/level-1:latest}
     network_mode: "host"
     environment:
       - BOT_NUMBER=1
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -228,6 +240,7 @@ services:
     environment:
       - BOT_NUMBER=2
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -239,6 +252,7 @@ services:
     environment:
       - BOT_NUMBER=3
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -250,6 +264,7 @@ services:
     environment:
       - BOT_NUMBER=4
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -261,6 +276,7 @@ services:
     environment:
       - BOT_NUMBER=5
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -272,6 +288,7 @@ services:
     environment:
       - BOT_NUMBER=6
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -283,6 +300,7 @@ services:
     environment:
       - BOT_NUMBER=7
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -294,6 +312,7 @@ services:
     environment:
       - BOT_NUMBER=8
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -305,6 +324,7 @@ services:
     environment:
       - BOT_NUMBER=9
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -316,6 +336,7 @@ services:
     environment:
       - BOT_NUMBER=10
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     restart: unless-stopped
     depends_on:
@@ -327,6 +348,7 @@ services:
     environment:
       - BOT_NUMBER=11
       - BOT_TEAM=${OPPONENT_SIDE:-away}
+      - BOT_GRPC_URL=localhost:${GAME_GRPC_PORT:-5000}
       - MODE=${MODE:-default} # default zombies statues kids defenses
     depends_on:
       game_server:
