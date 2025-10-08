@@ -40,7 +40,7 @@ If not, before continuing, please visit [the project website](https://lugobots.d
 6. **Are you ready to compete? Build your Docker image:** 
     
     ```sh 
-   docker build -t my-super-bot .
+   docker build -f .lugo/Dockerfile -t repo.lugobots.ai/[bot handle]:[version] .
    ```
 ## How to edit the bot   
 

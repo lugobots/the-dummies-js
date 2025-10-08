@@ -1,31 +1,20 @@
 `use strict`;
-import {
-    Bot,
-    GameSnapshotInspector,
-    Lugo,
-    Mapper,
-    PLAYER_STATE,
-    distanceBetweenPoints,
-    geo,
-    SPECS,
-    Region,
-    DIRECTION, ORIENTATION
-} from '@lugobots/lugo4node'
+import {Bot, GameSnapshotInspector, Mapper, Order, PLAYER_STATE, Point, Region, Team} from '@lugobots/lugo4node'
 import {getMyExpectedPosition} from './settings';
 
-type MethodReturn = Lugo.Order[] | { orders: Lugo.Order[]; debug_message: string; } | null;
+type MethodReturn = Order[] | { orders: Order[]; debug_message: string; } | null;
 
 export class MyBot implements Bot {
 
-    side: Lugo.Team.Side;
+    side: Team.Side;
 
     number: number;
 
-    initPosition: Lugo.Point;
+    initPosition: Point;
 
     mapper: Mapper;
 
-    constructor(side: Lugo.Team.Side, number: number, initPosition: Lugo.Point, mapper: Mapper) {
+    constructor(side: Team.Side, number: number, initPosition: Point, mapper: Mapper) {
         this.side = side
         this.number = number
         this.mapper = mapper

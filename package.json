@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lugobots/lugo4node": "^2.0.7"
+    "@lugobots/lugo4node": "^2.0.12"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
